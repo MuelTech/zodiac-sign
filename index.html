@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEBDEV</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="my-script.js" defer></script>
+</head>
+
+<body>
+    <h1>
+        Select your date of birth to discover your fate, <br />
+        Chinese zodiac and horoscope signs.
+    </h1>
+    <div class="container">
+        <h2 style="color: #333">What’s your date of birth?</h2>
+        <ul>
+            <li>
+                <div class="months">
+                    <p>Month</p>
+                    <select name="months" id="months">
+                        <option value="">--Select--</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <div class="day">
+                    <p>Day</p>
+                    <input type="text" name="day" id="day-inp" />
+                </div>
+            </li>
+            <li>
+                <div class="year">
+                    <p>Year</p>
+                    <input type="text" name="Year" id="year-inp" />
+                </div>
+            </li>
+        </ul>
+        <button class="submit-btn">Submit</button>
+    </div>
+    <div class="modal show">
+        <div class="zodiac-container">
+            <div class="horoscope">
+                <h2 style="text-align: center">Horoscope</h2>
+                <img src="./Chinese Zodiac Sign/Dog.jpg" alt="#" id="horoscope-img" />
+                <p class="text-horoscope">test</p>
+            </div>
+            <div class="chinese-zodiac">
+                <h2 style="text-align: center">Chinese Zodiac</h2>
+                <img src="./Chinese Zodiac Sign/Dragon.jpg" alt="chinese-zodiac" id="chinese-zodiac-img" />
+                <p class="text-chinese-zodiac">test</p>
+            </div>
+            <div class="fate-container">
+                <h3 class="fate-header" style="color: #333">#</h3>
+                <p class="fate-text">#</p>
+            </div>
+        </div>
+        <button class="reset-btn">Try again?</button>
+    </div>
+
+</body>
+
+</html>
