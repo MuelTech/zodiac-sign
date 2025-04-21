@@ -11,18 +11,6 @@ const chineseZodiacImg = document.querySelector('#chinese-zodiac-img');
 const resetBtn = document.querySelector('.reset-btn');
 const modal = document.querySelector('.show');
 
-submitBtn.addEventListener('click', () => {
-    const validateValue = validateDateOfBirth(days, years, months);
-    if (validateValue === true) {
-        showResult(days, years, months)
-        modal.classList.remove("show");
-    } 
-});
-
-resetBtn.addEventListener('click', () => {
-    resetResult();
-});
-
 const Horoscope = {
     aquarius: "./images/horoscope-month/Aquarius.webp",
     pisces: "./images/horoscope-month/Pisces.webp",
@@ -53,6 +41,34 @@ const ChineseZodiac = {
     goat: "./images/chinese-zodiac-sign/Goat.jpg",
 };
 
+submitBtn.addEventListener('click', () => {
+    const validateValue = validateDateOfBirth(days, years, months);
+    if (validateValue === true) {
+        showResult(days, years, months)
+        modal.classList.remove("show");
+    }
+});
+
+resetBtn.addEventListener('click', () => {
+    resetResult();
+});
+
+function validateLeapYears() {
+    const yearsValue = years.value;
+    const isYearDivisibleByFour = yearsValue % 4 === 0;
+    const isCentury = yearsValue % 100 === 0;
+    const isYearDivisibleByFourHundred = yearsValue % 400 === 0;
+
+    if (
+        isYearDivisibleByFour &&
+        (!isCentury || isYearDivisibleByFourHundred)
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 function validateDateOfBirth(days, years, months) {
     const dayValue = days.value;
     const yearValue = years.value;
@@ -60,13 +76,22 @@ function validateDateOfBirth(days, years, months) {
 
     if (isNaN(dayValue) || isNaN(yearValue)) {
         alert("Number only!");
+        return false;
     } else if (dayValue === "" || yearValue === "" || monthValue === "") {
         alert("You must fill out everything.");
+        return false;
+    } else if (monthValue === "February" && dayValue > 28 && !validateLeapYears()) {
+        alert("February cannot have more than 28 days in " + yearValue);
+        return false;
+    } else if (monthValue === "February" && dayValue > 29) {
+        alert("February cannot have more than 29 days even in leap years");
+        return false;
     } else if (yearValue < 1925 || yearValue > 2025 || dayValue < 1 || dayValue > 31) {
         alert("Invalid date of birth try again.");
-    } else {
-        return true;
+        return false;
     }
+
+    return true;
 }
 
 function getChineseZodiacSign(years) {
@@ -105,7 +130,7 @@ function getHoroscopeSign(days, months) {
 
     if (monthValue === "January" && dayValue >= 20 || monthValue === "February" && dayValue <= 18) {
         return "aquarius";
-    }  else if (monthValue === "February" && dayValue >= 19 || monthValue === "March" && dayValue <= 20) {
+    } else if (monthValue === "February" && dayValue >= 19 || monthValue === "March" && dayValue <= 20) {
         return "pisces";
     } else if (monthValue === "March" && dayValue >= 21 || monthValue === "April" && dayValue <= 19) {
         return "aries";
@@ -127,36 +152,8 @@ function getHoroscopeSign(days, months) {
         return "sagittarius";
     } else {
         return "capricornus";
-    } 
-}
-
-function getRandomFateText() {
-    const generateRandomText = Math.floor(Math.random() * 9) + 1;
-    console.log(generateRandomText);
-    switch(generateRandomText) {
-        case 1: return fateHeader.textContent = "Guiding Light", 
-        fatePara.textContent = "Fate is a compassionate force that illuminates our path, gently steering us toward growth and fulfillment. It acts as an inner compass, aligning our choices with unseen opportunities. Even in uncertainty, it whispers reassurance, reminding us that every step—whether joyful or challenging—carries purpose. Trust in this guiding light fosters resilience, transforming obstacles into lessons and coincidences into catalysts for transformation. By surrendering to its wisdom, we embrace life’s journey with courage, knowing we’re never truly lost.";
-        case 2: return fateHeader.textContent = "Cosmic Tapestry", 
-        fatePara.textContent = "Life’s events are threads in a grand, interconnected tapestry woven by fate. Each experience—joyful or painful—adds vibrant hues to the larger design. From chance encounters to pivotal decisions, every moment is meticulously stitched into a pattern that reveals meaning over time. This perspective invites awe, teaching us to honor both triumphs and trials as essential to our story. The tapestry’s beauty lies in its complexity, reminding us that even fragmented moments contribute to a masterpiece.";
-        case 3: return fateHeader.textContent = "Unseen Hand", 
-        fatePara.textContent = "Fate operates like an invisible artisan, shaping our lives with precision and care. It crafts serendipitous meetings, timely opportunities, and unexpected blessings, often when we least expect them. This unseen hand doesn’t control our free will but nudges us toward alignment with our deepest potential. By recognizing its subtle influence, we learn to flow with life’s rhythms, finding grace in uncertainty and gratitude for the hidden support that guides us toward wholeness.";
-        case 4: return fateHeader.textContent = "Symphony of Synchronicity", 
-        fatePara.textContent = "Existence is a harmonious symphony conducted by fate, where every event resonates with purpose. Synchronicities—meaningful coincidences—act as melodies that bridge past, present, and future. These moments feel like “aha” sparks, revealing connections we might otherwise miss. By attuning to this rhythm, we become both composers and listeners, co-creating our journey while trusting the universe’s perfect timing. The symphony reassures us that chaos is merely a prelude to harmony.";
-        case 5: return fateHeader.textContent = "Compass of Destiny", 
-        fatePara.textContent = "Fate is an unwavering compass pointing us toward our soul’s purpose. It doesn’t dictate our path but highlights directions that align with our authentic selves. Challenges become detours that refine our resolve, while triumphs validate our alignment. Trusting this compass means embracing curiosity over fear, knowing that even detours lead to growth. Destiny isn’t a fixed endpoint but a dynamic journey of self-discovery, guided by the compass’s steady pull.";
-        case 6: return fateHeader.textContent = "River of Possibility", 
-        fatePara.textContent = "Life flows like a river shaped by fate’s currents, carrying us through landscapes of change. Rapids represent challenges that strengthen us; calm waters reflect moments of clarity. Resistance leads to struggle, but surrender allows the river’s wisdom to guide us. Fate ensures that every bend holds new vistas, teaching us to navigate with flexibility and faith. The river’s journey reminds us that stagnation is temporary—forward motion is inevitable.";
-        case 7: return fateHeader.textContent = "Garden of Growth", 
-        fatePara.textContent = "Fate tends the garden of our existence, planting seeds of potential in fertile soil. Some sprout quickly; others require patience and nurturing. Storms may shake the garden, but they also nourish growth. Weeds of doubt are uprooted by time, revealing resilient blooms. This metaphor invites us to trust the seasons of life, understanding that fate’s design ensures every seed has its moment to flourish into something vibrant and true.";
-        case 8: return fateHeader.textContent = "Dance of Alignment", 
-        fatePara.textContent = "Life is a dance choreographed by fate, where steps unfold in perfect rhythm. Missteps are invitations to improvise, while synchronicities feel like partners moving in harmony. Fate doesn’t demand perfection but encourages us to sway with trust. The dance floor expands as we embrace uncertainty, learning that every turn—whether planned or spontaneous—belongs to a larger, joyful performance. The music never stops; it simply shifts tempo.";
-        case 9: return fateHeader.textContent = "Mosaic of Meaning", 
-        fatePara.textContent = "Our lives are mosaics pieced together by fate, each fragment a moment of joy, sorrow, or discovery. Individually, the pieces may seem insignificant, but collectively they form a stunning portrait of purpose. Fate ensures that even shattered dreams find their place, adding depth and contrast. This perspective transforms regret into gratitude, as we recognize that every experience—light or dark—contributes to the artistry of our existence.";
-        default: return fateHeader.textContent = "Echo of Eternity", 
-        fatePara.textContent = "Fate is the echo of timeless wisdom reverberating through our mortal lives. It connects fleeting moments to eternal truths, reminding us that our actions ripple beyond the present. Challenges become echoes of resilience; love becomes a resonance that transcends time. By listening to this echo, we align with a legacy larger than ourselves, understanding that our journey is both unique and universally intertwined.";
     }
 }
-
 
 function showResult(days, years, months) {
     const horocopeValue = getHoroscopeSign(days, months);
@@ -188,3 +185,29 @@ function resetResult() {
     modal.classList.add("show");
 }
 
+function getRandomFateText() {
+    const generateRandomText = Math.floor(Math.random() * 9) + 1;
+    console.log(generateRandomText);
+    switch (generateRandomText) {
+        case 1: return fateHeader.textContent = "Guiding Light",
+            fatePara.textContent = "Fate is a compassionate force that illuminates our path, gently steering us toward growth and fulfillment. It acts as an inner compass, aligning our choices with unseen opportunities. Even in uncertainty, it whispers reassurance, reminding us that every step—whether joyful or challenging—carries purpose. Trust in this guiding light fosters resilience, transforming obstacles into lessons and coincidences into catalysts for transformation. By surrendering to its wisdom, we embrace life’s journey with courage, knowing we’re never truly lost.";
+        case 2: return fateHeader.textContent = "Cosmic Tapestry",
+            fatePara.textContent = "Life’s events are threads in a grand, interconnected tapestry woven by fate. Each experience—joyful or painful—adds vibrant hues to the larger design. From chance encounters to pivotal decisions, every moment is meticulously stitched into a pattern that reveals meaning over time. This perspective invites awe, teaching us to honor both triumphs and trials as essential to our story. The tapestry’s beauty lies in its complexity, reminding us that even fragmented moments contribute to a masterpiece.";
+        case 3: return fateHeader.textContent = "Unseen Hand",
+            fatePara.textContent = "Fate operates like an invisible artisan, shaping our lives with precision and care. It crafts serendipitous meetings, timely opportunities, and unexpected blessings, often when we least expect them. This unseen hand doesn’t control our free will but nudges us toward alignment with our deepest potential. By recognizing its subtle influence, we learn to flow with life’s rhythms, finding grace in uncertainty and gratitude for the hidden support that guides us toward wholeness.";
+        case 4: return fateHeader.textContent = "Symphony of Synchronicity",
+            fatePara.textContent = "Existence is a harmonious symphony conducted by fate, where every event resonates with purpose. Synchronicities—meaningful coincidences—act as melodies that bridge past, present, and future. These moments feel like “aha” sparks, revealing connections we might otherwise miss. By attuning to this rhythm, we become both composers and listeners, co-creating our journey while trusting the universe’s perfect timing. The symphony reassures us that chaos is merely a prelude to harmony.";
+        case 5: return fateHeader.textContent = "Compass of Destiny",
+            fatePara.textContent = "Fate is an unwavering compass pointing us toward our soul’s purpose. It doesn’t dictate our path but highlights directions that align with our authentic selves. Challenges become detours that refine our resolve, while triumphs validate our alignment. Trusting this compass means embracing curiosity over fear, knowing that even detours lead to growth. Destiny isn’t a fixed endpoint but a dynamic journey of self-discovery, guided by the compass’s steady pull.";
+        case 6: return fateHeader.textContent = "River of Possibility",
+            fatePara.textContent = "Life flows like a river shaped by fate’s currents, carrying us through landscapes of change. Rapids represent challenges that strengthen us; calm waters reflect moments of clarity. Resistance leads to struggle, but surrender allows the river’s wisdom to guide us. Fate ensures that every bend holds new vistas, teaching us to navigate with flexibility and faith. The river’s journey reminds us that stagnation is temporary—forward motion is inevitable.";
+        case 7: return fateHeader.textContent = "Garden of Growth",
+            fatePara.textContent = "Fate tends the garden of our existence, planting seeds of potential in fertile soil. Some sprout quickly; others require patience and nurturing. Storms may shake the garden, but they also nourish growth. Weeds of doubt are uprooted by time, revealing resilient blooms. This metaphor invites us to trust the seasons of life, understanding that fate’s design ensures every seed has its moment to flourish into something vibrant and true.";
+        case 8: return fateHeader.textContent = "Dance of Alignment",
+            fatePara.textContent = "Life is a dance choreographed by fate, where steps unfold in perfect rhythm. Missteps are invitations to improvise, while synchronicities feel like partners moving in harmony. Fate doesn’t demand perfection but encourages us to sway with trust. The dance floor expands as we embrace uncertainty, learning that every turn—whether planned or spontaneous—belongs to a larger, joyful performance. The music never stops; it simply shifts tempo.";
+        case 9: return fateHeader.textContent = "Mosaic of Meaning",
+            fatePara.textContent = "Our lives are mosaics pieced together by fate, each fragment a moment of joy, sorrow, or discovery. Individually, the pieces may seem insignificant, but collectively they form a stunning portrait of purpose. Fate ensures that even shattered dreams find their place, adding depth and contrast. This perspective transforms regret into gratitude, as we recognize that every experience—light or dark—contributes to the artistry of our existence.";
+        default: return fateHeader.textContent = "Echo of Eternity",
+            fatePara.textContent = "Fate is the echo of timeless wisdom reverberating through our mortal lives. It connects fleeting moments to eternal truths, reminding us that our actions ripple beyond the present. Challenges become echoes of resilience; love becomes a resonance that transcends time. By listening to this echo, we align with a legacy larger than ourselves, understanding that our journey is both unique and universally intertwined.";
+    }
+}
